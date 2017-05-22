@@ -49,15 +49,16 @@ def main():
 
         # predict ages and genders of the detected faces
         results = model.predict(faces)
-        predicted_genders = results[0]
-        ages = np.arange(0, 101).reshape(101, 1)
-        predicted_ages = results[1].dot(ages).flatten()
+        if len(results) > 0:
+            predicted_genders = results[0]
+            ages = np.arange(0, 101).reshape(101, 1)
+            predicted_ages = results[1].dot(ages).flatten()
 
-        # draw results
-        for i, d in enumerate(detected):
-            label = "{}, {}".format(int(predicted_ages[i]),
-                                    "F" if predicted_genders[i][0] > 0.5 else "M")
-            draw_label(img, (d.left(), d.top()), label)
+            # draw results
+            for i, d in enumerate(detected):
+                label = "{}, {}".format(int(predicted_ages[i]),
+                                        "F" if predicted_genders[i][0] > 0.5 else "M")
+                draw_label(img, (d.left(), d.top()), label)
 
         cv2.imshow("result", img)
         key = cv2.waitKey(30)
